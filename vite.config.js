@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'Reddli – ردلي',
-        short_name: 'Reddli',
+        name: 'Redeli – ردلي',
+        short_name: 'Redeli',
         description: 'Lebanese fintech — convert, change-check, smart pay',
         theme_color: '#1a7a58',
         background_color: '#f4f6f8',

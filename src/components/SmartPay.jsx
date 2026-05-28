@@ -2,6 +2,8 @@ import { useState } from 'react';
 import WalletSection from './WalletSection.jsx';
 import { USD_DENOMS, LBP_DENOMS, RATE } from '../constants.js';
 import { runOptimizer, fmt, brk } from '../utils/optimizer.js';
+import USDKeypad from './USDKeypad.jsx';
+import LBPKeypad from './LBPKeypad.jsx';
 
 const initQty = (denoms) => Object.fromEntries(denoms.map(d => [d.val, 0]));
 
@@ -12,6 +14,8 @@ export default function SmartPay({ showToast }) {
   const [billCcy, setBillCcy] = useState('USD');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showUSDPad, setShowUSDPad] = useState(false);
+  const [showLBPPad, setShowLBPPad] = useState(false);
 
   const changeQty = (currency, denom, delta) => {
     const setter = currency === 'usd' ? setUsdQ : setLbpQ;
@@ -46,9 +50,13 @@ export default function SmartPay({ showToast }) {
         <div className="ci">
           <div className="ctitle">Bill Amount</div>
           <div className="bill-input-row">
-            <input className="bill-in" type="number" placeholder="0"
-              value={billAmt} onChange={e => setBillAmt(e.target.value)} />
-            <div className="ccy-pill" onClick={() => setBillCcy(c => c === 'USD' ? 'LBP' : 'USD')}>
+            <div className="bill-in" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              onClick={() => billCcy === 'USD' ? setShowUSDPad(true) : setShowLBPPad(true)}>
+              {billAmt && billAmt !== '0'
+                ? (billCcy === 'LBP' ? fmt(parseFloat(billAmt)) : billAmt)
+                : <span style={{ color: 'var(--t3)' }}>0</span>}
+            </div>
+            <div className="ccy-pill" onClick={() => { setBillCcy(c => c === 'USD' ? 'LBP' : 'USD'); setBillAmt(''); }}>
               {billCcy}
             </div>
           </div>
@@ -77,6 +85,23 @@ export default function SmartPay({ showToast }) {
       </button>
 
       <OptResults results={results} cpOpt={cpOpt} />
+
+      {showUSDPad && (
+        <USDKeypad
+          initialValue={billAmt}
+          label="Bill Amount (USD)"
+          onValue={v => setBillAmt(v)}
+          onClose={() => setShowUSDPad(false)}
+        />
+      )}
+      {showLBPPad && (
+        <LBPKeypad
+          initialValue={parseFloat(billAmt) || 0}
+          label="Bill Amount (LBP)"
+          onValue={v => setBillAmt(String(v))}
+          onClose={() => setShowLBPPad(false)}
+        />
+      )}
     </>
   );
 }

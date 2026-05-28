@@ -23,7 +23,7 @@ export default function LoginScreen({ onSwitch }: Props) {
     <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
       <div style={{ textAlign: 'center', marginBottom: 8 }}>
         <div style={{ fontSize: 36, marginBottom: 6 }}>ر</div>
-        <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--t)' }}>Sign in to Reddli</div>
+        <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--t)' }}>Sign in to Redeli</div>
         <div style={{ fontSize: 12, color: 'var(--t3)', marginTop: 4 }}>ردلي</div>
       </div>
 

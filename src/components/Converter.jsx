@@ -1,10 +1,16 @@
 import { useState, useCallback } from 'react';
 import { RATE } from '../constants.js';
 import { fmt } from '../utils/optimizer.js';
+import LBPKeypad from './LBPKeypad.jsx';
+import USDKeypad from './USDKeypad.jsx';
 
 export default function Converter({ showToast }) {
   const [convDir, setConvDir] = useState('usd-lbp');
   const [inputVal, setInputVal] = useState('100');
+  const [showLBPPad, setShowLBPPad] = useState(false);
+  const [showUSDPad, setShowUSDPad] = useState(false);
+
+  const isLBPInput = convDir === 'lbp-usd';
 
   const compute = useCallback((val, dir) => {
     const v = parseFloat(val) || 0;
@@ -25,6 +31,7 @@ export default function Converter({ showToast }) {
     const next = convDir === 'usd-lbp' ? 'lbp-usd' : 'usd-lbp';
     setConvDir(next);
     setInputVal(outVal.replace(/,/g, ''));
+    setShowLBPPad(false);
   };
 
   const handleKey = (v) => {
@@ -99,13 +106,17 @@ export default function Converter({ showToast }) {
       <div className="conv-block">
         <div className="conv-row">
           <div className="conv-ccy">{fromFlag} <span>{fromCode}</span></div>
-          <input
-            className="conv-inp"
-            type="number"
-            placeholder="0"
-            value={inputVal}
-            onChange={e => handleInput(e.target.value)}
-          />
+          {isLBPInput ? (
+            <div className="conv-inp" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              onClick={() => setShowLBPPad(true)}>
+              {parseFloat(inputVal) > 0 ? fmt(parseFloat(inputVal)) : <span style={{ color: 'var(--t3)' }}>0</span>}
+            </div>
+          ) : (
+            <div className="conv-inp" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              onClick={() => setShowUSDPad(true)}>
+              {inputVal && inputVal !== '0' ? inputVal : <span style={{ color: 'var(--t3)' }}>0</span>}
+            </div>
+          )}
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', margin: '2px 0' }}>
           <div className="swap-btn" onClick={handleSwap}>⇅</div>
@@ -151,19 +162,22 @@ export default function Converter({ showToast }) {
         </div>
       </div>
 
-      <div className="card">
-        <div className="ci">
-          <div className="ctitle">Keypad</div>
-          <div className="keypad">
-            {['1','2','3','4','5','6','7','8','9'].map(k => (
-              <div key={k} className="key" onClick={() => handleKey(k)}>{k}</div>
-            ))}
-            <div className="key" style={{ fontSize: 22 }} onClick={() => handleKey('.')}>·</div>
-            <div className="key" onClick={() => handleKey('0')}>0</div>
-            <div className="key key-del" onClick={() => handleKey('del')}>⌫</div>
-          </div>
-        </div>
-      </div>
+      {showUSDPad && (
+        <USDKeypad
+          initialValue={inputVal}
+          label="Amount (USD)"
+          onValue={v => setInputVal(v || '0')}
+          onClose={() => setShowUSDPad(false)}
+        />
+      )}
+      {showLBPPad && (
+        <LBPKeypad
+          initialValue={parseFloat(inputVal) || 0}
+          label="Amount (LBP)"
+          onValue={v => setInputVal(String(v))}
+          onClose={() => setShowLBPPad(false)}
+        />
+      )}
     </>
   );
 }

@@ -139,7 +139,7 @@ function AppShell() {
               <div className="logo-row">
                 <div className="logo-ic">ر</div>
                 <div>
-                  <span className="logo-txt">Reddli </span>
+                  <span className="logo-txt">Redeli </span>
                   <span className="logo-ar">ردلي</span>
                 </div>
               </div>
@@ -147,9 +147,10 @@ function AppShell() {
                 <div className="ibt" style={{ cursor: 'default', opacity: 0.5 }}>
                   <img src={darkmodeIcon} alt="Dark mode" style={{ width: 20, height: 20, objectFit: 'contain' }} />
                 </div>
-                {!isAuthenticated && (
-                  <div className="ibt" onClick={() => { setAuthMode('login'); setShowAuth(true); }}>🔑</div>
-                )}
+                {isAuthenticated
+                  ? <div className="ibt" onClick={handleLogout} title="Sign out">👤</div>
+                  : <div className="ibt" onClick={() => { setAuthMode('login'); setShowAuth(true); }}>🔑</div>
+                }
                 <div className="ibt">
                   <img src={notifIcon} alt="Notifications" style={{ width: 20, height: 20, objectFit: 'contain' }} />
                 </div>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { expensesApi } from '../lib/api';
+import LBPKeypad from '../components/LBPKeypad.jsx';
+import USDKeypad from '../components/USDKeypad.jsx';
 
 interface Expense {
   id: string;
@@ -28,6 +30,8 @@ export default function ExpensesScreen() {
   // Add form state
   const [amount, setAmount]     = useState('');
   const [currency, setCurrency] = useState('USD');
+  const [showLBPPad, setShowLBPPad] = useState(false);
+  const [showUSDPad, setShowUSDPad] = useState(false);
   const [category, setCategory] = useState('Food');
   const [note, setNote]         = useState('');
   const [date, setDate]         = useState(() => new Date().toISOString().slice(0, 10));
@@ -191,10 +195,21 @@ export default function ExpensesScreen() {
             {/* Amount + currency row */}
             <div style={{ display: 'flex', gap: 8 }}>
               <div className="cc-iw" style={{ flex: 1 }}>
-                <input className="cc-in" type="number" placeholder="Amount" value={amount}
-                  onChange={e => setAmount(e.target.value)} style={{ width: '100%' }} />
+                {currency === 'LBP' ? (
+                  <div className="cc-in" style={{ flex: 1, display: 'flex', alignItems: 'center',
+                    cursor: 'pointer', color: parseFloat(amount) > 0 ? 'var(--t)' : 'var(--t3)' }}
+                    onClick={() => setShowLBPPad(true)}>
+                    {parseFloat(amount) > 0 ? Number(amount).toLocaleString() : 'Amount'}
+                  </div>
+                ) : (
+                  <div className="cc-in" style={{ flex: 1, display: 'flex', alignItems: 'center',
+                    cursor: 'pointer', color: amount ? 'var(--t)' : 'var(--t3)' }}
+                    onClick={() => setShowUSDPad(true)}>
+                    {amount || 'Amount'}
+                  </div>
+                )}
               </div>
-              <select value={currency} onChange={e => setCurrency(e.target.value)}
+              <select value={currency} onChange={e => { setCurrency(e.target.value); setAmount(''); }}
                 style={{ background: 'var(--s2)', border: '0.5px solid var(--bo)', borderRadius: 12,
                   padding: '0 12px', fontSize: 13, color: 'var(--t)', fontWeight: 600 }}>
                 <option>USD</option>
@@ -231,6 +246,23 @@ export default function ExpensesScreen() {
             </button>
           </div>
         </div>
+      )}
+
+      {showLBPPad && (
+        <LBPKeypad
+          initialValue={parseFloat(amount) || 0}
+          label="Expense Amount (LBP)"
+          onValue={v => setAmount(String(v))}
+          onClose={() => setShowLBPPad(false)}
+        />
+      )}
+      {showUSDPad && (
+        <USDKeypad
+          initialValue={amount}
+          label="Expense Amount (USD)"
+          onValue={v => setAmount(v)}
+          onClose={() => setShowUSDPad(false)}
+        />
       )}
     </div>
   );

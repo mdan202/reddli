@@ -595,6 +595,17 @@ html, body {
   color: #fff;
 }
 
+.key-clr {
+  background: var(--goldl);
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.key-clr:active {
+  background: var(--gold);
+  color: #fff;
+}
+
 /* ── Change Checker ── */
 .cc-lbl {
   font-size: 12px;
