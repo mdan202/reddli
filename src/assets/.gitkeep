@@ -1,0 +1,5 @@
+# Drop your bill photos here with these exact filenames:
+# usd1.jpg  usd5.jpg  usd10.jpg  usd20.jpg  usd50.jpg  usd100.jpg
+# lbp5k.jpg  lbp10k.jpg  lbp20k.jpg  lbp50k.jpg  lbp100k.jpg
+#
+# Then update src/billImages.js to import them statically.
