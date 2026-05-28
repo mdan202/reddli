@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+const WEB_MODE = import.meta.env.VITE_WEB_MODE === 'true';
 import Converter from './components/Converter.jsx';
 import ChangeChecker from './components/ChangeChecker.jsx';
 import SmartPay from './components/SmartPay.jsx';
@@ -115,9 +116,9 @@ function AppShell() {
   const expensesTab = isAuthenticated ? 4 : -1;
 
   if (authLoading) return (
-    <div className="frame">
-      <div className={`phone${dark ? ' dm' : ''}`}>
-        <div className="notch"><span className="notch-t">{time}</span><span className="notch-i">● ●●●</span></div>
+    <div className={WEB_MODE ? 'web-frame' : 'frame'}>
+      <div className={`phone${dark ? ' dm' : ''}${WEB_MODE ? ' web-phone' : ''}`}>
+        {!WEB_MODE && <div className="notch"><span className="notch-t">{time}</span><span className="notch-i">● ●●●</span></div>}
         <div className="screen" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading…</div>
         </div>
@@ -126,12 +127,14 @@ function AppShell() {
   );
 
   return (
-    <div className="frame">
-      <div className={`phone${dark ? ' dm' : ''}`}>
-        <div className="notch">
-          <span className="notch-t">{time}</span>
-          <span className="notch-i">● ●●●</span>
-        </div>
+    <div className={WEB_MODE ? 'web-frame' : 'frame'}>
+      <div className={`phone${dark ? ' dm' : ''}${WEB_MODE ? ' web-phone' : ''}`}>
+        {!WEB_MODE && (
+          <div className="notch">
+            <span className="notch-t">{time}</span>
+            <span className="notch-i">● ●●●</span>
+          </div>
+        )}
 
         <div className="screen">
           <div className="sticky-header">
