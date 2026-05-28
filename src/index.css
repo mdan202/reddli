@@ -53,41 +53,41 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
 }
 
-/* ── Web mode (Vercel — no phone frame) ── */
+/* ── Web mode (Vercel — no phone frame, native app feel) ── */
 .web-frame {
-  min-height: 100vh;
-  background: var(--bg);
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
   justify-content: center;
+  background: var(--bg);
 }
 
 .web-phone {
   width: 100%;
   max-width: 430px;
-  min-height: 100vh;
-  height: auto !important;
+  height: 100dvh !important;
   border-radius: 0 !important;
   border: none !important;
   box-shadow: none !important;
   box-sizing: border-box !important;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .web-phone .screen {
-  min-height: 0;
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  height: auto !important;
+  -webkit-overflow-scrolling: touch;
+  height: 0 !important;
 }
 
 @media (min-width: 430px) {
-  .web-frame {
-    background: var(--bg);
-  }
   .web-phone {
-    box-shadow: 0 0 40px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 0 40px rgba(0,0,0,0.08) !important;
   }
 }
 

@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 const WEB_MODE = import.meta.env.VITE_WEB_MODE === 'true';
+if (WEB_MODE) {
+  document.documentElement.style.cssText = 'height:100%;overflow:hidden;';
+  document.body.style.cssText = 'height:100%;overflow:hidden;background:var(--bg)';
+}
 import Converter from './components/Converter.jsx';
 import ChangeChecker from './components/ChangeChecker.jsx';
 import SmartPay from './components/SmartPay.jsx';
